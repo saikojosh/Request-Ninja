@@ -44,7 +44,7 @@ module.exports = class RequestNinja {
   }
 
   /*
-   *
+   * Converts the URL to the options that http.request() expects.
    */
   convertUrlToOptions (input) {
 
@@ -108,7 +108,8 @@ module.exports = class RequestNinja {
       req.on('error', (err) => reject(err));
 
       // Write data to request body if given.
-      if (postData) { req.write(postData); }
+      if (postData) { req.write(this.preparePostData(postData)); }
+
       req.end();
 
     });
@@ -118,6 +119,21 @@ module.exports = class RequestNinja {
 
     // Otherwise fire the callback when the promise returns.
     future.then((data) => callback(null, data)).catch((err) => callback(err));
+
+  }
+
+  /*
+   * Returns true if the given post data can be written directly to the request stream.
+   */
+  preparePostData (postData) {
+
+    if (typeof postData === 'string' || postData instanceof Buffer) {
+      return postData;
+    } else if (typeof postData === 'object') {
+      return JSON.encode(postData);
+    }
+
+    return '';
 
   }
 
