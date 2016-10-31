@@ -25,12 +25,12 @@ module.exports = class RequestNinja {
 
       case 'object':
         this.options = input;
-        this.mode = 'url';
+        this.mode = 'options';
         break;
 
       case 'string':
         this.options = this.convertUrlToOptions(input);
-        this.mode = 'options';
+        this.mode = 'url';
         break;
 
       default:
@@ -39,7 +39,7 @@ module.exports = class RequestNinja {
     }
 
     // Figure out which module we need to use.
-    this.module = (this.options.protocol === 'https' ? https : http);
+    this.module = (this.options.protocol === 'https:' ? https : http);
 
   }
 
@@ -51,11 +51,11 @@ module.exports = class RequestNinja {
     const parts = url.parse(input);
     const options = {};
 
-    options.protocol = parts.protocol || 'http';
-    options.hostname = parts.hostname || parts.host || null;
-    options.port = parts.port || null;
-    options.path = (parts.pathname + parts.search + parts.hash) || null;
-    options.auth = parts.auth || null;
+    options.protocol = parts.protocol || 'http:';
+    options.hostname = parts.hostname || parts.host || void (0);
+    options.port = parts.port || void (0);
+    options.path = (parts.pathname + (parts.search || '') + (parts.hash || '')) || void (0);
+    options.auth = parts.auth || void (0);
 
     return options;
 
@@ -91,7 +91,7 @@ module.exports = class RequestNinja {
 
       // Make the request.
       let body = '';
-      const req = http.request(this.options, (res) => {
+      const req = this.module.request(this.options, (res) => {
         res.setEncoding(this.encoding);
         res.on('data', (chunk) => body += chunk);
         res.on('end', () => resolve(body));
@@ -122,7 +122,7 @@ module.exports = class RequestNinja {
     if (typeof postData === 'string' || postData instanceof Buffer) {
       return postData;
     } else if (typeof postData === 'object') {
-      return JSON.encode(postData);
+      return JSON.stringify(postData);
     }
 
     return '';
