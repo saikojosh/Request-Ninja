@@ -23,6 +23,9 @@
     "patch"
   ],
   "main": "index.js",
+  "scripts": {
+    "test": "mocha ./tests/"
+  },
   "author": "Josh Cole <saikojosh@gmail.com> (http://www.JoshuaCole.me)",
   "contributors": [
     {
