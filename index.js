@@ -62,14 +62,6 @@ module.exports = class RequestNinja {
   }
 
   /*
-   * Figure out if we are using HTTPS or not.
-   */
-  parseProtocol (url) {
-    if (typeof url !== 'string') { return null; }
-    return (url.match(/^https/i) ? 'https' : 'http');
-  }
-
-  /*
    * Modify the default encoding of the request.
    */
   setEncoding (encoding) {
