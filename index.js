@@ -129,4 +129,18 @@ module.exports = class RequestNinja {
 
   }
 
+  /*
+   * Shortcut method for a get request.
+   */
+  get (callback = null) {
+    this.go(null, callback);
+  }
+
+  /*
+   * Shortcut method for a post request.
+   */
+  post (postData, callback = null) {
+    this.go(postData, callback);
+  }
+
 };
