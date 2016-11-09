@@ -24,7 +24,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests/"
+    "tests": "mocha ./tests/"
   },
   "author": "Josh Cole <saikojosh@gmail.com> (http://www.JoshuaCole.me)",
   "contributors": [
