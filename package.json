@@ -33,7 +33,9 @@
       "email": "saikojosh@gmail.com"
     }
   ],
-  "dependencies": {},
+  "dependencies": {
+    "ifnotundefined": "^0.0.1"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "latest",
@@ -41,7 +43,7 @@
     "eslint-config-settled": "latest",
     "eslint-plugin-babel": "latest",
     "eslint-plugin-import": "latest",
-    "eslint-plugin-jsx-a11y": "latest",
+    "eslint-plugin-jsx-a11y": "^2",
     "eslint-plugin-react": "latest",
     "mocha": "^3.0.2"
   },
