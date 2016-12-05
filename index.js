@@ -103,7 +103,10 @@ module.exports = class RequestNinja {
       const req = this.module.request(this.options, (res) => {
         res.setEncoding(this.encoding);
         res.on('data', chunk => responseBody += chunk);
-        res.on('end', () => resolve(this.parseJSONResponse ? JSON.parse(responseBody) : responseBody));
+        res.on('end', () => {
+          const isJSON = (res.getHeader('Content-Type') === 'application/json');
+          return resolve(this.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody)
+        });
       });
 
       req.on('error', err => reject(err));
