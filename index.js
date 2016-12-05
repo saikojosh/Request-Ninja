@@ -8,17 +8,19 @@ const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
 const url = require('url');
+const ifNotUndefined = require('ifnotundefined');
 
 module.exports = class RequestNinja {
 
   /*
    * Create a new request by passing in a URL or a Node http.request() options object.
    */
-  constructor (input) {
+  constructor (input, settings = {}) {
 
     // Defaults.
-    this.encoding = 'utf8';
-    this.timeout = null;
+    this.encoding = ifNotUndefined(settings.encoding, 'utf8');
+    this.timeout = ifNotUndefined(settings.timeout, null);
+    this.parseJSONResponse = ifNotUndefined(settings.parseJSONResponse, true);
     this.mode = null;
     this.options = {};
 
@@ -101,7 +103,7 @@ module.exports = class RequestNinja {
       const req = this.module.request(this.options, (res) => {
         res.setEncoding(this.encoding);
         res.on('data', chunk => responseBody += chunk);
-        res.on('end', () => resolve(responseBody));
+        res.on('end', () => resolve(this.parseJSONResponse ? JSON.parse(responseBody) : responseBody));
       });
 
       req.on('error', err => reject(err));
