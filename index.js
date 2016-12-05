@@ -6,6 +6,7 @@
 
 const http = require('http');
 const https = require('https');
+const querystring = require('querystring');
 const url = require('url');
 
 module.exports = class RequestNinja {
@@ -94,18 +95,25 @@ module.exports = class RequestNinja {
       if (typeof this.timeout === 'number') { this.options.timeout = this.timeout; }
 
       // Make the request.
-      let body = '';
+      const requestBody = (postData && this.options.method === 'POST' ? this.preparePostData(postData) : null);
+      let responseBody = '';
+
       const req = this.module.request(this.options, (res) => {
         res.setEncoding(this.encoding);
-        res.on('data', (chunk) => body += chunk);
-        res.on('end', () => resolve(body));
+        res.on('data', chunk => responseBody += chunk);
+        res.on('end', () => resolve(responseBody));
       });
 
-      req.on('error', (err) => reject(err));
+      req.on('error', err => reject(err));
 
-      // Write data to request body if given.
-      if (postData) { req.write(this.preparePostData(postData)); }
+      // Cope with sending data in post requests.
+      if (requestBody) {
+        req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        req.setHeader('Content-Length', Buffer.byteLength(requestBody));
+        req.write(requestBody, this.encoding);
+      }
 
+      // Action the request.
       req.end();
 
     });
@@ -126,7 +134,7 @@ module.exports = class RequestNinja {
     if (typeof postData === 'string' || postData instanceof Buffer) {
       return postData;
     } else if (typeof postData === 'object') {
-      return JSON.stringify(postData);
+      return querystring.stringify(postData);
     }
 
     return '';
