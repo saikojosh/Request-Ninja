@@ -34,7 +34,7 @@
     }
   ],
   "dependencies": {
-    "ifnotundefined": "^0.0.1"
+    "ifnotundefined": "^0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
