@@ -17,6 +17,7 @@ module.exports = class RequestNinja {
 
     // Defaults.
     this.encoding = 'utf8';
+    this.timeout = null;
     this.mode = null;
     this.options = {};
 
@@ -79,12 +80,15 @@ module.exports = class RequestNinja {
    * Fire the request with optional post data. If a callback is not specified this will return a promise.
    * callback(err, data);
    */
-  go (postData, callback = null) {
+  go (postData, callback = null, extraOptions = {}) {
 
     const future = new Promise((resolve, reject) => {
 
       // If post data has been specified when we're in quick mode lets set the method appropriately.
-      if (this.mode === 'url' && postData) { this.options.method = 'POST'; }
+      if (this.mode === 'url' && postData && !extraOptions.forceMethod) { this.options.method = 'POST'; }
+
+      // If we are forcing a particular method to be used lets set it appropriately.
+      if (extraOptions.forceMethod) { this.options.method = extraOptions.forceMethod; }
 
       // Override the timeout in the options, if one was explicitly set.
       if (typeof this.timeout === 'number') { this.options.timeout = this.timeout; }
@@ -110,7 +114,7 @@ module.exports = class RequestNinja {
     if (typeof callback !== 'function') { return future; }
 
     // Otherwise fire the callback when the promise returns.
-    future.then((data) => callback(null, data)).catch((err) => callback(err));
+    future.then(data => callback(null, data)).catch(err => callback(err));
 
   }
 
@@ -133,14 +137,18 @@ module.exports = class RequestNinja {
    * Shortcut method for a get request.
    */
   get (callback = null) {
-    this.go(null, callback);
+    return this.go(null, callback, {
+      forceMethod: 'GET',
+    });
   }
 
   /*
    * Shortcut method for a post request.
    */
   post (postData, callback = null) {
-    this.go(postData, callback);
+    return this.go(postData, callback, {
+      forceMethod: 'POST',
+    });
   }
 
 };
