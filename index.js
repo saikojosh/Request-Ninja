@@ -105,7 +105,7 @@ module.exports = class RequestNinja {
         res.on('data', chunk => responseBody += chunk);
         res.on('end', () => {
           const isJSON = (res.getHeader('Content-Type') === 'application/json');
-          return resolve(this.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody)
+          return resolve(this.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
         });
       });
 
