@@ -32,11 +32,11 @@
 	"scripts": {
 		"tests": "mocha ./tests/"
 	},
-	"author": "Josh Cole <saikojosh@gmail.com> (http://www.JoshuaCole.me)",
+	"author": "Josh Cole <hello@joshuacole.me> (http://www.JoshuaCole.me)",
 	"contributors": [
 		{
 			"name": "Josh Cole",
-			"email": "saikojosh@gmail.com"
+			"email": "hello@joshuacole.me"
 		}
 	],
 	"dependencies": {
