@@ -16,11 +16,17 @@
 		"request",
 		"get",
 		"post",
+		"patch",
+		"put",
 		"http",
 		"https",
+		"ssl",
 		"query",
 		"endpoint",
-		"patch"
+		"api",
+		"network",
+		"net",
+		"json"
 	],
 	"main": "index.js",
 	"scripts": {
