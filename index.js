@@ -104,7 +104,8 @@ module.exports = class RequestNinja {
         res.setEncoding(this.encoding);
         res.on('data', chunk => responseBody += chunk);
         res.on('end', () => {
-          const isJSON = (res.headers['content-type'] === 'application/json');
+          const headers = (res.headers[`content-type`] || '').split(`;`);
+          const isJSON = headers.includes(`application/json`);
           return resolve(this.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
         });
       });
