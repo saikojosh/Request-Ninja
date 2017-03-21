@@ -1,56 +1,56 @@
 {
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/saikojosh/Request-Ninja.git"
-	},
-	"bugs": {
-		"url": "https://github.com/saikojosh/Request-Ninja/issues"
-	},
-	"name": "request-ninja",
-	"version": "0.0.8",
-	"description": "A simple helper module to help with calling an endpoint and returning some data.",
-	"keywords": [
-		"request",
-		"get",
-		"post",
-		"patch",
-		"put",
-		"http",
-		"https",
-		"ssl",
-		"query",
-		"endpoint",
-		"api",
-		"network",
-		"net",
-		"json"
-	],
-	"main": "index.js",
-	"scripts": {
-		"tests": "mocha ./tests/"
-	},
-	"author": "Josh Cole <hello@joshuacole.me> (http://www.JoshuaCole.me)",
-	"contributors": [
-		{
-			"name": "Josh Cole",
-			"email": "hello@joshuacole.me"
-		}
-	],
-	"dependencies": {
-		"ifnotundefined": "^0"
-	},
-	"devDependencies": {
-		"chai": "^3.5.0",
-		"eslint": "latest",
-		"eslint-config-recombix": "latest",
-		"eslint-plugin-filenames": "latest",
-		"eslint-plugin-json": "latest",
-		"eslint-plugin-node": "^4.2.1",
-		"eslint-plugin-promise": "latest",
-		"mocha": "^3.0.2"
-	},
-	"license": "MIT"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saikojosh/Request-Ninja.git"
+  },
+  "bugs": {
+    "url": "https://github.com/saikojosh/Request-Ninja/issues"
+  },
+  "name": "request-ninja",
+  "version": "0.1.0",
+  "description": "A simple helper module to help with calling an endpoint and returning some data.",
+  "keywords": [
+    "request",
+    "get",
+    "post",
+    "patch",
+    "put",
+    "http",
+    "https",
+    "ssl",
+    "query",
+    "endpoint",
+    "api",
+    "network",
+    "net",
+    "json"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "tests": "mocha ./tests/"
+  },
+  "author": "Josh Cole <hello@joshuacole.me> (http://www.JoshuaCole.me)",
+  "contributors": [
+    {
+      "name": "Josh Cole",
+      "email": "hello@joshuacole.me"
+    }
+  ],
+  "dependencies": {
+    "ifnotundefined": "^0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "latest",
+    "eslint-config-recombix": "latest",
+    "eslint-plugin-filenames": "latest",
+    "eslint-plugin-json": "latest",
+    "eslint-plugin-node": "^4.2.1",
+    "eslint-plugin-promise": "latest",
+    "mocha": "^3.0.2"
+  },
+  "license": "MIT"
 }
