@@ -1,51 +1,51 @@
 {
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/saikojosh/Request-Ninja.git"
-  },
-  "bugs": {
-    "url": "https://github.com/saikojosh/Request-Ninja/issues"
-  },
-  "name": "request-ninja",
-  "version": "0.0.8",
-  "description": "A simple helper module to help with calling an endpoint and returning some data.",
-  "keywords": [
-    "request",
-    "get",
-    "post",
-    "http",
-    "https",
-    "query",
-    "endpoint",
-    "patch"
-  ],
-  "main": "index.js",
-  "scripts": {
-    "tests": "mocha ./tests/"
-  },
-  "author": "Josh Cole <saikojosh@gmail.com> (http://www.JoshuaCole.me)",
-  "contributors": [
-    {
-      "name": "Josh Cole",
-      "email": "saikojosh@gmail.com"
-    }
-  ],
-  "dependencies": {
-    "ifnotundefined": "^0.0"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "latest",
-    "eslint-config-airbnb": "latest",
-    "eslint-config-settled": "latest",
-    "eslint-plugin-babel": "latest",
-    "eslint-plugin-import": "latest",
-    "eslint-plugin-jsx-a11y": "^2",
-    "eslint-plugin-react": "latest",
-    "mocha": "^3.0.2"
-  },
-  "license": "MIT"
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/saikojosh/Request-Ninja.git"
+	},
+	"bugs": {
+		"url": "https://github.com/saikojosh/Request-Ninja/issues"
+	},
+	"name": "request-ninja",
+	"version": "0.0.8",
+	"description": "A simple helper module to help with calling an endpoint and returning some data.",
+	"keywords": [
+		"request",
+		"get",
+		"post",
+		"http",
+		"https",
+		"query",
+		"endpoint",
+		"patch"
+	],
+	"main": "index.js",
+	"scripts": {
+		"tests": "mocha ./tests/"
+	},
+	"author": "Josh Cole <saikojosh@gmail.com> (http://www.JoshuaCole.me)",
+	"contributors": [
+		{
+			"name": "Josh Cole",
+			"email": "saikojosh@gmail.com"
+		}
+	],
+	"dependencies": {
+		"ifnotundefined": "^0.0"
+	},
+	"devDependencies": {
+		"chai": "^3.5.0",
+		"eslint": "latest",
+		"eslint-config-airbnb": "latest",
+		"eslint-config-settled": "latest",
+		"eslint-plugin-babel": "latest",
+		"eslint-plugin-import": "latest",
+		"eslint-plugin-jsx-a11y": "^2",
+		"eslint-plugin-react": "latest",
+		"mocha": "^3.0.2"
+	},
+	"license": "MIT"
 }
