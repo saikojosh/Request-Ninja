@@ -87,9 +87,22 @@ module.exports = class RequestNinja {
 	/*
 	 * Set multiple headers provided as an object.
 	 */
-	setHeaders (headerHash) {
+	setHeaders (_headerHash) {
+
+		const headerHash = {};
+
+		// Make sure all header keys are lower case.
+		for (const key in _headerHash) {
+			if (!_headerHash.hasOwnProperty(key)) { continue; }
+			const value = _headerHash[key];
+			headerHash[key.toLowerCase()] = value;
+		}
+
+		// Merge new headers in.
 		this.options.headers = extender.merge(this.options.headers || {}, headerHash);
+
 		return this;
+
 	}
 
 	/*
