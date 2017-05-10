@@ -12,6 +12,10 @@ const querystring = require(`querystring`);
 const url = require(`url`);
 const extender = require(`object-extender`);
 
+const ErrorNinja = require(`error-ninja`).define({
+	INVALID_POST_DATA_TYPE: `Post data must be a String, Buffer, Object, Array, or Undefined.`,
+});
+
 module.exports = class RequestNinja {
 
 	/*
@@ -22,7 +26,7 @@ module.exports = class RequestNinja {
 		this.settings = extender.defaults({
 			encoding: `utf8`,
 			timeout: null,
-			encodeJSONRequest: true,
+			encodeJsonRequest: true,
 			parseJsonResponse: true,
 			forceMethod: null,
 		}, _settings);
@@ -142,7 +146,20 @@ module.exports = class RequestNinja {
 
 			// Prepare the data for the POST request.
 			if (postData && this.requestOptions.method === `POST`) {
-				requestBody = this.preparePostData(postData, this.requestOptions.headers, useSettings);
+
+				// Prepare and set the request body.
+				const {
+					preparedPostData,
+					preparedContentType,
+				} = this.preparePostData(postData, this.requestOptions.headers, useSettings);
+
+				requestBody = preparedPostData;
+
+				// Only automatically set the content type if it wasn't set by the user.
+				if (!this.requestOptions.headers[`content-type`]) {
+					this.requestOptions.headers[`content-type`] = preparedContentType;
+				}
+
 			}
 
 			// Make the request and handle the response.
@@ -159,7 +176,6 @@ module.exports = class RequestNinja {
 
 			// Cope with sending data in post requests.
 			if (requestBody) {
-				req.setHeader(`Content-Type`, `application/x-www-form-urlencoded`);
 				req.setHeader(`Content-Length`, Buffer.byteLength(requestBody));
 				req.write(requestBody, useSettings.encoding);
 			}
@@ -182,15 +198,39 @@ module.exports = class RequestNinja {
 	 */
 	preparePostData (postData, headers, settings) {
 
+		let preparedPostData = ``;
+		let preparedContentType = `application/x-www-form-urlencoded`;
+
+		// Strings and buffers can be passed straight through to Node's "http.request()" method.
 		if (typeof postData === `string` || postData instanceof Buffer) {
-			return postData;
-		}
-		else if (typeof postData === `object`) {
-			const isJson = this.isContentTypeJson(headers);
-			return (isJson && settings.encodeJSONRequest ? JSON.stringify(postData) : querystring.stringify(postData));
+			preparedPostData = postData;
+			preparedContentType = `application/x-www-form-urlencoded`;
 		}
 
-		return ``;
+		// If an object has been passed in we need to encode it.
+		else if (typeof postData === `object`) {
+			const isJson = this.isContentTypeJson(headers);
+			const encodeJson = settings.encodeJsonRequest;
+
+			// We should encode as JSON.
+			if (isJson && encodeJson) {
+				preparedPostData = JSON.stringify(postData);
+				preparedContentType = `application/json`;
+			}
+
+			// We should NOT encode as JSON.
+			else {
+				preparedPostData = querystring.stringify(postData);
+				preparedContentType = `application/x-www-form-urlencoded`;
+			}
+		}
+
+		// Throw an error for invalid post data types.
+		else if (typeof postData !== `undefined`) {
+			throw new ErrorNinja(`INVALID_POST_DATA_TYPE`);
+		}
+
+		return { preparedPostData, preparedContentType };
 
 	}
 
