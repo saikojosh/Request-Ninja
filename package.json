@@ -28,7 +28,7 @@
     "net",
     "json"
   ],
-  "main": "index.js",
+  "main": "requestNinja.js",
   "scripts": {
     "tests": "mocha ./tests/"
   },
