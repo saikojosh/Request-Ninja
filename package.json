@@ -40,7 +40,8 @@
     }
   ],
   "dependencies": {
-    "ifnotundefined": "^0"
+    "ifnotundefined": "^0",
+    "object-extender": "^2.0.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",
