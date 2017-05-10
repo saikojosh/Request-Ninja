@@ -165,7 +165,7 @@ module.exports = class RequestNinja {
 				req.write(requestBody, useSettings.encoding);
 			}
 
-			// Action the request.
+			// Finish the request.
 			req.end();
 
 		});
