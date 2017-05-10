@@ -243,7 +243,7 @@ module.exports = class RequestNinja {
 	}
 
 	/*
-	 * Shortcut method for a get request.
+	 * Shortcut method for a GET request.
 	 */
 	get (callback = null) {
 		return this.go(null, callback, {
@@ -252,7 +252,7 @@ module.exports = class RequestNinja {
 	}
 
 	/*
-	 * Shortcut method for a post request.
+	 * Shortcut method for a POST request.
 	 */
 	post (postData, callback = null) {
 		return this.go(postData, callback, {
