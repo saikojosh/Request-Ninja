@@ -17,7 +17,7 @@
 const expect = require(`chai`).expect;
 const RequestNinja = require(`../requestNinja`);
 
-describe(`Request: GET`, () => {
+describe(`When making a GET request`, () => {
 
 	it(`should return data using a promise when a URI is requested using URL mode`, function (done) {
 		this.timeout(1000 * 5);
@@ -25,9 +25,9 @@ describe(`Request: GET`, () => {
 		const req = new RequestNinja(`http://httpbin.org/get`);
 
 		req.go()
-			.then(result => JSON.parse(result))
 			.then(result => {
 				expect(result).to.be.ok;
+				expect(result).to.be.an(`object`);
 				expect(result).to.have.a.property(`url`, `http://httpbin.org/get`);
 				return result;
 			})
@@ -41,10 +41,10 @@ describe(`Request: GET`, () => {
 
 		const req = new RequestNinja(`http://httpbin.org/get`);
 
-		req.go(null, (err, _result) => {
+		req.go(null, null, (err, result) => {
 			if (err) { return done(err); }
-			expect(_result).to.be.ok;
-			const result = JSON.parse(_result);
+			expect(result).to.be.ok;
+			expect(result).to.be.an(`object`);
 			expect(result).to.have.a.property(`url`, `http://httpbin.org/get`);
 			return done();
 		});
