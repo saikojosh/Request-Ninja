@@ -10,7 +10,6 @@ const http = require(`http`);
 const https = require(`https`);
 const querystring = require(`querystring`);
 const url = require(`url`);
-const ifNotUndefined = require(`ifnotundefined`);
 const extender = require(`object-extender`);
 
 module.exports = class RequestNinja {
