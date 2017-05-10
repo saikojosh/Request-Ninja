@@ -18,12 +18,15 @@ module.exports = class RequestNinja {
 	/*
 	 * Create a new request by passing in a URL or a Node http.request() options object.
 	 */
-	constructor (input, settings = {}) {
+	constructor (input, _settings = {}) {
 
-		// Defaults.
-		this.encoding = ifNotUndefined(settings.encoding, `utf8`);
-		this.timeout = ifNotUndefined(settings.timeout, null);
-		this.parseJSONResponse = ifNotUndefined(settings.parseJSONResponse, true);
+		this.settings = extender.defaults({
+			encoding: `utf8`,
+			timeout: null,
+			encodeJSONRequest: true,
+			parseJSONResponse: true,
+		}, _settings);
+
 		this.mode = null;
 		this.options = {};
 
@@ -72,7 +75,7 @@ module.exports = class RequestNinja {
 	 * Modify the default encoding of the request.
 	 */
 	setEncoding (encoding) {
-		this.encoding = encoding;
+		this.settings.encoding = encoding;
 		return this;
 	}
 
@@ -80,7 +83,7 @@ module.exports = class RequestNinja {
 	 * Modify the default encoding of the request.
 	 */
 	setTimeout (milliseconds) {
-		this.timeout = milliseconds;
+		this.settings.timeout = milliseconds;
 		return this;
 	}
 
@@ -129,7 +132,7 @@ module.exports = class RequestNinja {
 			if (extraOptions.forceMethod) { this.options.method = extraOptions.forceMethod; }
 
 			// Override the timeout in the options, if one was explicitly set.
-			if (typeof this.timeout === `number`) { this.options.timeout = this.timeout; }
+			if (typeof this.settings.timeout === `number`) { this.options.timeout = this.settings.timeout; }
 
 			let requestBody = null;
 			let responseBody = ``;
@@ -141,12 +144,12 @@ module.exports = class RequestNinja {
 
 			// Make the request and handle the response.
 			const req = this.module.request(this.options, res => {
-				res.setEncoding(this.encoding);
+				res.setEncoding(this.settings.encoding);
 				res.on(`data`, chunk => responseBody += chunk);
 				res.on(`end`, () => {
 					const headers = (res.headers[`content-type`] || ``).split(`;`);
 					const isJSON = headers.includes(`application/json`);
-					return resolve(this.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
+					return resolve(this.settings.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
 				});
 			});
 
@@ -156,7 +159,7 @@ module.exports = class RequestNinja {
 			if (requestBody) {
 				req.setHeader(`Content-Type`, `application/x-www-form-urlencoded`);
 				req.setHeader(`Content-Length`, Buffer.byteLength(requestBody));
-				req.write(requestBody, this.encoding);
+				req.write(requestBody, this.settings.encoding);
 			}
 
 			// Action the request.
