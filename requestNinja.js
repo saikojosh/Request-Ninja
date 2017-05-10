@@ -119,7 +119,7 @@ module.exports = class RequestNinja {
 	 * Set a single header provided in the format "Authorisation: Bearer .....".
 	 */
 	setHeader (headerString) {
-		const [key, value] = headerString.split(/\s?:\s?/);
+		const [key, value] = headerString.split(/\s*:\s*/);
 		return this.setHeaders({ [key]: value });
 	}
 
