@@ -73,6 +73,7 @@ module.exports = class RequestNinja {
 	 */
 	setEncoding (encoding) {
 		this.encoding = encoding;
+		return this;
 	}
 
 	/*
@@ -80,6 +81,7 @@ module.exports = class RequestNinja {
 	 */
 	setTimeout (milliseconds) {
 		this.timeout = milliseconds;
+		return this;
 	}
 
 	/*
