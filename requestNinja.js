@@ -131,11 +131,16 @@ module.exports = class RequestNinja {
 			// Override the timeout in the options, if one was explicitly set.
 			if (typeof this.timeout === `number`) { this.options.timeout = this.timeout; }
 
-			// Make the request.
-			const requestBody = (postData && this.options.method === `POST` ? this.preparePostData(postData) : null);
+			let requestBody = null;
 			let responseBody = ``;
 
-			const req = this.module.request(this.options, (res) => {
+			// Prepare the data for the POST request.
+			if (postData && this.options.method === `POST`) {
+				requestBody = this.preparePostData(postData, this.options.headers);
+			}
+
+			// Make the request and handle the response.
+			const req = this.module.request(this.options, res => {
 				res.setEncoding(this.encoding);
 				res.on(`data`, chunk => responseBody += chunk);
 				res.on(`end`, () => {
@@ -170,13 +175,14 @@ module.exports = class RequestNinja {
 	/*
 	 * Returns true if the given post data can be written directly to the request stream.
 	 */
-	preparePostData (postData) {
+	preparePostData (postData, headers) {
 
 		if (typeof postData === `string` || postData instanceof Buffer) {
 			return postData;
 		}
 		else if (typeof postData === `object`) {
-			return querystring.stringify(postData);
+			const isJson = (headers[`content-type`] === `application/json`);
+			return (isJson ? JSON.stringify(postData) : querystring.stringify(postData));
 		}
 
 		return ``;
