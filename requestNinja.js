@@ -4,11 +4,13 @@
  * REQUEST NINJA
  */
 
-const http = require('http');
-const https = require('https');
-const querystring = require('querystring');
-const url = require('url');
-const ifNotUndefined = require('ifnotundefined');
+/* eslint id-length: 0 */
+
+const http = require(`http`);
+const https = require(`https`);
+const querystring = require(`querystring`);
+const url = require(`url`);
+const ifNotUndefined = require(`ifnotundefined`);
 
 module.exports = class RequestNinja {
 
@@ -18,7 +20,7 @@ module.exports = class RequestNinja {
 	constructor (input, settings = {}) {
 
 		// Defaults.
-		this.encoding = ifNotUndefined(settings.encoding, 'utf8');
+		this.encoding = ifNotUndefined(settings.encoding, `utf8`);
 		this.timeout = ifNotUndefined(settings.timeout, null);
 		this.parseJSONResponse = ifNotUndefined(settings.parseJSONResponse, true);
 		this.mode = null;
@@ -27,23 +29,23 @@ module.exports = class RequestNinja {
 		// Prepare the request options.
 		switch (typeof input) {
 
-			case 'object':
+			case `object`:
 				this.options = input;
-				this.mode = 'options';
+				this.mode = `options`;
 				break;
 
-			case 'string':
+			case `string`:
 				this.options = this.convertUrlToOptions(input);
-				this.mode = 'url';
+				this.mode = `url`;
 				break;
 
 			default:
-				throw new Error('Invalid input.');
+				throw new Error(`Invalid input.`);
 
 		}
 
 		// Figure out which module we need to use.
-		this.module = (this.options.protocol === 'https:' ? https : http);
+		this.module = (this.options.protocol === `https:` ? https : http);
 
 	}
 
@@ -55,10 +57,10 @@ module.exports = class RequestNinja {
 		const parts = url.parse(input);
 		const options = {};
 
-		options.protocol = parts.protocol || 'http:';
+		options.protocol = parts.protocol || `http:`;
 		options.hostname = parts.hostname || parts.host || void (0);
 		options.port = parts.port || void (0);
-		options.path = (parts.pathname + (parts.search || '') + (parts.hash || '')) || void (0);
+		options.path = (parts.pathname + (parts.search || ``) + (parts.hash || ``)) || void (0);
 		options.auth = parts.auth || void (0);
 
 		return options;
@@ -75,8 +77,8 @@ module.exports = class RequestNinja {
 	/*
 	 * Modify the default encoding of the request.
 	 */
-	setTimeout (ms) {
-		this.timeout = ms;
+	setTimeout (milliseconds) {
+		this.timeout = milliseconds;
 	}
 
 	/*
@@ -84,38 +86,39 @@ module.exports = class RequestNinja {
 	 * callback(err, data);
 	 */
 	go (postData, callback = null, extraOptions = {}) {
+		/* eslint promise/no-callback-in-promise: 0 */
 
 		const future = new Promise((resolve, reject) => {
 
 			// If post data has been specified when we're in quick mode lets set the method appropriately.
-			if (this.mode === 'url' && postData && !extraOptions.forceMethod) { this.options.method = 'POST'; }
+			if (this.mode === `url` && postData && !extraOptions.forceMethod) { this.options.method = `POST`; }
 
 			// If we are forcing a particular method to be used lets set it appropriately.
 			if (extraOptions.forceMethod) { this.options.method = extraOptions.forceMethod; }
 
 			// Override the timeout in the options, if one was explicitly set.
-			if (typeof this.timeout === 'number') { this.options.timeout = this.timeout; }
+			if (typeof this.timeout === `number`) { this.options.timeout = this.timeout; }
 
 			// Make the request.
-			const requestBody = (postData && this.options.method === 'POST' ? this.preparePostData(postData) : null);
-			let responseBody = '';
+			const requestBody = (postData && this.options.method === `POST` ? this.preparePostData(postData) : null);
+			let responseBody = ``;
 
 			const req = this.module.request(this.options, (res) => {
 				res.setEncoding(this.encoding);
-				res.on('data', chunk => responseBody += chunk);
-				res.on('end', () => {
-					const headers = (res.headers[`content-type`] || '').split(`;`);
+				res.on(`data`, chunk => responseBody += chunk);
+				res.on(`end`, () => {
+					const headers = (res.headers[`content-type`] || ``).split(`;`);
 					const isJSON = headers.includes(`application/json`);
 					return resolve(this.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
 				});
 			});
 
-			req.on('error', err => reject(err));
+			req.on(`error`, err => reject(err));
 
 			// Cope with sending data in post requests.
 			if (requestBody) {
-				req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-				req.setHeader('Content-Length', Buffer.byteLength(requestBody));
+				req.setHeader(`Content-Type`, `application/x-www-form-urlencoded`);
+				req.setHeader(`Content-Length`, Buffer.byteLength(requestBody));
 				req.write(requestBody, this.encoding);
 			}
 
@@ -125,7 +128,7 @@ module.exports = class RequestNinja {
 		});
 
 		// Return the promise if we aren't using a callback.
-		if (typeof callback !== 'function') { return future; }
+		if (typeof callback !== `function`) { return future; }
 
 		// Otherwise fire the callback when the promise returns.
 		future.then(data => callback(null, data)).catch(err => callback(err));
@@ -137,13 +140,14 @@ module.exports = class RequestNinja {
 	 */
 	preparePostData (postData) {
 
-		if (typeof postData === 'string' || postData instanceof Buffer) {
+		if (typeof postData === `string` || postData instanceof Buffer) {
 			return postData;
-		} else if (typeof postData === 'object') {
+		}
+		else if (typeof postData === `object`) {
 			return querystring.stringify(postData);
 		}
 
-		return '';
+		return ``;
 
 	}
 
@@ -152,7 +156,7 @@ module.exports = class RequestNinja {
 	 */
 	get (callback = null) {
 		return this.go(null, callback, {
-			forceMethod: 'GET',
+			forceMethod: `GET`,
 		});
 	}
 
@@ -161,7 +165,7 @@ module.exports = class RequestNinja {
 	 */
 	post (postData, callback = null) {
 		return this.go(postData, callback, {
-			forceMethod: 'POST',
+			forceMethod: `POST`,
 		});
 	}
 

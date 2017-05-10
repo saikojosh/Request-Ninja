@@ -52,5 +52,8 @@
     "eslint-plugin-promise": "latest",
     "mocha": "^3.0.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=6"
+  }
 }
