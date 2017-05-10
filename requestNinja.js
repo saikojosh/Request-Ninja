@@ -11,6 +11,7 @@ const https = require(`https`);
 const querystring = require(`querystring`);
 const url = require(`url`);
 const ifNotUndefined = require(`ifnotundefined`);
+const extender = require(`object-extender`);
 
 module.exports = class RequestNinja {
 
@@ -79,6 +80,22 @@ module.exports = class RequestNinja {
 	 */
 	setTimeout (milliseconds) {
 		this.timeout = milliseconds;
+	}
+
+	/*
+	 * Set multiple headers provided as an object.
+	 */
+	setHeaders (headerHash) {
+		this.options.headers = extender.merge(this.options.headers || {}, headerHash);
+		return this;
+	}
+
+	/*
+	 * Set a single header provided in the format "Authorisation: Bearer .....".
+	 */
+	setHeader (headerString) {
+		const [key, value] = headerString.split(/\s?:\s?/);
+		return this.setHeaders({ [key]: value });
 	}
 
 	/*
