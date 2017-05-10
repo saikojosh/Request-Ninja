@@ -120,7 +120,7 @@ module.exports = class RequestNinja {
 	 * Fire the request with optional post data. If a callback is not specified this will return a promise.
 	 * callback(err, data);
 	 */
-	go (postData, callback = null, overrideSettings = {}) {
+	go (postData, overrideSettings = {}, callback = null) {
 		/* eslint promise/no-callback-in-promise: 0 */
 
 		const future = new Promise((resolve, reject) => {
