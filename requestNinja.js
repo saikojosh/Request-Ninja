@@ -52,6 +52,9 @@ module.exports = class RequestNinja {
 
 		}
 
+		// Ensure we have a headers hash if it hasn't been set.
+		this.requestOptions.headers = this.requestOptions.headers || {};
+
 		// Figure out which module we need to use.
 		this.module = (this.requestOptions.protocol === `https:` ? https : http);
 
