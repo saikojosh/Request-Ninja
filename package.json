@@ -27,7 +27,7 @@
   ],
   "main": "requestNinja.js",
   "scripts": {
-    "tests": "mocha ./tests/"
+    "test": "mocha ./tests/"
   },
   "author": "Josh Cole <hello@joshuacole.me> (http://www.JoshuaCole.me)",
   "contributors": [
