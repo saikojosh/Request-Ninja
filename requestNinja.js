@@ -220,4 +220,14 @@ module.exports = class RequestNinja {
 		});
 	}
 
+	/*
+	 * Forcefully stringifies the post data and forces the method to "POST".
+	 */
+	postJson (postData, callback = null) {
+		this.setHeader(`Content-Type: application/json`);
+		return this.go(JSON.stringify(postData), callback, {
+			forceMethod: `POST`,
+		});
+	}
+
 };
