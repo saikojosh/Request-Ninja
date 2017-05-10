@@ -23,7 +23,7 @@ module.exports = class RequestNinja {
 			encoding: `utf8`,
 			timeout: null,
 			encodeJSONRequest: true,
-			parseJSONResponse: true,
+			parseJsonResponse: true,
 			forceMethod: null,
 		}, _settings);
 
@@ -151,7 +151,7 @@ module.exports = class RequestNinja {
 				res.on(`data`, chunk => responseBody += chunk);
 				res.on(`end`, () => {
 					const isJson = this.isContentTypeJson(res.headers);
-					return resolve(useSettings.parseJSONResponse && isJson ? JSON.parse(responseBody) : responseBody);
+					return resolve(useSettings.parseJsonResponse && isJson ? JSON.parse(responseBody) : responseBody);
 				});
 			});
 
