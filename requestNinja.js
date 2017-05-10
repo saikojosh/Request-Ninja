@@ -150,9 +150,8 @@ module.exports = class RequestNinja {
 				res.setEncoding(useSettings.encoding);
 				res.on(`data`, chunk => responseBody += chunk);
 				res.on(`end`, () => {
-					const headers = (res.headers[`content-type`] || ``).split(`;`);
-					const isJSON = headers.includes(`application/json`);
-					return resolve(useSettings.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
+					const isJson = this.isContentTypeJson(res.headers);
+					return resolve(useSettings.parseJSONResponse && isJson ? JSON.parse(responseBody) : responseBody);
 				});
 			});
 
@@ -187,12 +186,20 @@ module.exports = class RequestNinja {
 			return postData;
 		}
 		else if (typeof postData === `object`) {
-			const isJson = (headers[`content-type`] === `application/json`);
+			const isJson = this.isContentTypeJson(headers);
 			return (isJson && settings.encodeJSONRequest ? JSON.stringify(postData) : querystring.stringify(postData));
 		}
 
 		return ``;
 
+	}
+
+	/*
+	 * Returns true if the Content-Type header exists and includes "application/json".
+	 */
+	isContentTypeJson (headers) {
+		const headerParts = (headers[`content-type`] || ``).split(`;`);
+		return headerParts.includes(`application/json`);
 	}
 
 	/*
