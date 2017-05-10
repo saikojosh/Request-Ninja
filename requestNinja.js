@@ -24,21 +24,22 @@ module.exports = class RequestNinja {
 			timeout: null,
 			encodeJSONRequest: true,
 			parseJSONResponse: true,
+			forceMethod: null,
 		}, _settings);
 
 		this.mode = null;
-		this.options = {};
+		this.requestOptions = {};
 
 		// Prepare the request options.
 		switch (typeof input) {
 
 			case `object`:
-				this.options = input;
+				this.requestOptions = input;
 				this.mode = `options`;
 				break;
 
 			case `string`:
-				this.options = this.convertUrlToOptions(input);
+				this.requestOptions = this.convertUrlToOptions(input);
 				this.mode = `url`;
 				break;
 
@@ -48,7 +49,7 @@ module.exports = class RequestNinja {
 		}
 
 		// Figure out which module we need to use.
-		this.module = (this.options.protocol === `https:` ? https : http);
+		this.module = (this.requestOptions.protocol === `https:` ? https : http);
 
 	}
 
@@ -58,15 +59,15 @@ module.exports = class RequestNinja {
 	convertUrlToOptions (input) {
 
 		const parts = url.parse(input);
-		const options = {};
+		const requestOptions = {};
 
-		options.protocol = parts.protocol || `http:`;
-		options.hostname = parts.hostname || parts.host || void (0);
-		options.port = parts.port || void (0);
-		options.path = (parts.pathname + (parts.search || ``) + (parts.hash || ``)) || void (0);
-		options.auth = parts.auth || void (0);
+		requestOptions.protocol = parts.protocol || `http:`;
+		requestOptions.hostname = parts.hostname || parts.host || void (0);
+		requestOptions.port = parts.port || void (0);
+		requestOptions.path = (parts.pathname + (parts.search || ``) + (parts.hash || ``)) || void (0);
+		requestOptions.auth = parts.auth || void (0);
 
-		return options;
+		return requestOptions;
 
 	}
 
@@ -101,7 +102,7 @@ module.exports = class RequestNinja {
 		}
 
 		// Merge new headers in.
-		this.options.headers = extender.merge(this.options.headers || {}, headerHash);
+		this.requestOptions.headers = extender.merge(this.requestOptions.headers || {}, headerHash);
 
 		return this;
 
@@ -119,36 +120,39 @@ module.exports = class RequestNinja {
 	 * Fire the request with optional post data. If a callback is not specified this will return a promise.
 	 * callback(err, data);
 	 */
-	go (postData, callback = null, extraOptions = {}) {
+	go (postData, callback = null, overrideSettings = {}) {
 		/* eslint promise/no-callback-in-promise: 0 */
 
 		const future = new Promise((resolve, reject) => {
 
+			// Merge the override settings into the existing settings.
+			const useSettings = extender.merge(this.settings, overrideSettings);
+
 			// If post data has been specified when we're in quick mode lets set the method appropriately.
-			if (this.mode === `url` && postData && !extraOptions.forceMethod) { this.options.method = `POST`; }
+			if (this.mode === `url` && postData && !useSettings.forceMethod) { this.requestOptions.method = `POST`; }
 
 			// If we are forcing a particular method to be used lets set it appropriately.
-			if (extraOptions.forceMethod) { this.options.method = extraOptions.forceMethod; }
+			if (useSettings.forceMethod) { this.requestOptions.method = useSettings.forceMethod; }
 
 			// Override the timeout in the options, if one was explicitly set.
-			if (typeof this.settings.timeout === `number`) { this.options.timeout = this.settings.timeout; }
+			if (typeof useSettings.timeout === `number`) { this.requestOptions.timeout = useSettings.timeout; }
 
 			let requestBody = null;
 			let responseBody = ``;
 
 			// Prepare the data for the POST request.
-			if (postData && this.options.method === `POST`) {
-				requestBody = this.preparePostData(postData, this.options.headers, this.settings);
+			if (postData && this.requestOptions.method === `POST`) {
+				requestBody = this.preparePostData(postData, this.requestOptions.headers, useSettings);
 			}
 
 			// Make the request and handle the response.
-			const req = this.module.request(this.options, res => {
-				res.setEncoding(this.settings.encoding);
+			const req = this.module.request(this.requestOptions, res => {
+				res.setEncoding(useSettings.encoding);
 				res.on(`data`, chunk => responseBody += chunk);
 				res.on(`end`, () => {
 					const headers = (res.headers[`content-type`] || ``).split(`;`);
 					const isJSON = headers.includes(`application/json`);
-					return resolve(this.settings.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
+					return resolve(useSettings.parseJSONResponse && isJSON ? JSON.parse(responseBody) : responseBody);
 				});
 			});
 
@@ -158,7 +162,7 @@ module.exports = class RequestNinja {
 			if (requestBody) {
 				req.setHeader(`Content-Type`, `application/x-www-form-urlencoded`);
 				req.setHeader(`Content-Length`, Buffer.byteLength(requestBody));
-				req.write(requestBody, this.settings.encoding);
+				req.write(requestBody, useSettings.encoding);
 			}
 
 			// Action the request.
