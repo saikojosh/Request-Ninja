@@ -266,6 +266,10 @@ entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
+error-ninja@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/error-ninja/-/error-ninja-0.2.0.tgz#bb7cd28f52c0c3e87e13890eed6744b7ff48d0ce"
+
 es5-ext@^0.10.14, es5-ext@^0.10.9, es5-ext@~0.10.14:
   version "0.10.15"
   resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.15.tgz#c330a5934c1ee21284a7c081a86e5fd937c91ea6"
@@ -563,10 +567,6 @@ htmlparser2@3.8.x:
     domutils "1.5"
     entities "1.0"
     readable-stream "1.1"
-
-ifnotundefined@^0:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/ifnotundefined/-/ifnotundefined-0.0.2.tgz#71a6fa5293be960c69be8279d1b5ff3b691078fc"
 
 ignore@^3.0.11, ignore@^3.2.0:
   version "3.2.6"
