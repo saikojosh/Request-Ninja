@@ -138,7 +138,7 @@ module.exports = class RequestNinja {
 
 			// Prepare the data for the POST request.
 			if (postData && this.options.method === `POST`) {
-				requestBody = this.preparePostData(postData, this.options.headers);
+				requestBody = this.preparePostData(postData, this.options.headers, this.settings);
 			}
 
 			// Make the request and handle the response.
@@ -177,14 +177,14 @@ module.exports = class RequestNinja {
 	/*
 	 * Returns true if the given post data can be written directly to the request stream.
 	 */
-	preparePostData (postData, headers) {
+	preparePostData (postData, headers, settings) {
 
 		if (typeof postData === `string` || postData instanceof Buffer) {
 			return postData;
 		}
 		else if (typeof postData === `object`) {
 			const isJson = (headers[`content-type`] === `application/json`);
-			return (isJson ? JSON.stringify(postData) : querystring.stringify(postData));
+			return (isJson && settings.encodeJSONRequest ? JSON.stringify(postData) : querystring.stringify(postData));
 		}
 
 		return ``;
