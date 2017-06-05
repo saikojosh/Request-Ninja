@@ -47,13 +47,14 @@ A few minor breaking changes have been made in version 0.2.
 ### new RequestNinja(input, settings)
 Returns a new instance of a request when supplied with the endpoint to call, and optionally a hash of settings to configure Request-Ninja's behaviour. The `input` parameter can be either a URL or the a hash of properties you could pass to Node's built in `http.request()` method.
 
-| Setting           | Default Value | Description |
-|-------------------|---------------|-------------|
-| encoding          | "utf8"        | Override the encoding to use for requests and responses. |
-| timeout           | `null`        | Set the number of milliseconds to wait before we time out an ongoing request. Set to a falsy value to disable. |
-| encodeJsonRequest | `true`        | By default, if you set the "Content-Type" header to "application/json" and the POST body is an Object/Array, it will be stringified automatically. Set to `false` to disable. |
-| parseJsonResponse | `true`        | By default, if the "Content-Type" header of the response is set to "application/json" and the response body contains JSON, it will be parsed automatically. Set to `false` to disable. |
-| forceMethod       | `null`        | Override the method we'll be using when making the request. |
+| Setting              | Default Value | Description |
+|----------------------|---------------|-------------|
+| encoding             | "utf8"        | Override the encoding to use for requests and responses. |
+| timeout              | `null`        | Set the number of milliseconds to wait before we time out an ongoing request. Set to a falsy value to disable. |
+| encodeJsonRequest    | `true`        | By default, if you set the "Content-Type" header to "application/json" and the POST body is an Object/Array, it will be stringified automatically. Set to `false` to disable. |
+| parseJsonResponse    | `true`        | By default, if the "Content-Type" header of the response is set to "application/json" and the response body contains JSON, it will be parsed automatically. Set to `false` to disable. |
+| returnResponseObject | false         | Returns the node `response` object directly. If the response body is JSON it will be parsed and available as the `response.body` property. |
+| forceMethod          | `null`        | Override the method we'll be using when making the request. |
 
 ### .setEncoding(encoding)
 Change the encoding setting after a request object has been initialised. Affects the encoding for both the request and the response. Returns the request object so it can be chained.
