@@ -30,7 +30,7 @@ Make a POST request with JSON like this:
 const RequestNinja = require(`request-ninja`);
 const req = new RequestNinja(`https://www.example.com/api/my-endpoint`);
 
-req.json({ some: `post data` })  // Will be encoded as JSON and the Content-Type header set to "application/json".
+req.postJson({ some: `post data` })  // Will be encoded as JSON and the Content-Type header set to "application/json".
 	.then(data => { ... })
 	.catch(err => { ... });
 ```
