@@ -175,7 +175,7 @@ module.exports = class RequestNinja {
 					const isJson = this.isContentTypeJson(res.headers);
 					res.body = (isJson ? JSON.parse(responseBody) : responseBody);
 
-					return resolve(useSettings.returnResponseObject ? res : responseBody);
+					return resolve(useSettings.returnResponseObject ? res : res.body);
 
 				});
 			});
