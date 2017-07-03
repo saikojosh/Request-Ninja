@@ -234,7 +234,7 @@ module.exports = class RequestNinja {
 		}
 
 		// Throw an error for invalid post data types.
-		else if (typeof postData !== `undefined`) {
+		else if (postData) {
 			throw new ErrorNinja(`INVALID_POST_DATA_TYPE`);
 		}
 
