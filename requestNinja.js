@@ -128,7 +128,7 @@ module.exports = class RequestNinja {
 	 * Fire the request with optional post data. If a callback is not specified this will return a promise.
 	 * callback(err, data);
 	 */
-	go (postData, overrideSettings = {}, callback = null) {
+	go (postData, overrideSettings = {}, callback = null, stream = null) {
 		/* eslint promise/no-callback-in-promise: 0 */
 
 		const future = new Promise((resolve, reject) => {
@@ -186,10 +186,18 @@ module.exports = class RequestNinja {
 			if (requestBody) {
 				req.setHeader(`Content-Length`, Buffer.byteLength(requestBody));
 				req.write(requestBody, useSettings.encoding);
+				req.end();
 			}
 
-			// Finish the request.
-			req.end();
+			// Or if we have a stream lets pipe it.
+			else if (stream) {
+				stream.pipe(req);
+			}
+
+			// Otherwise just finish the request.
+			else {
+				req.end();
+			}
 
 		});
 
@@ -277,6 +285,15 @@ module.exports = class RequestNinja {
 		return this.go(json, {
 			forceMethod: `POST`,
 		}, callback);
+	}
+
+	/*
+	 * Forcefully sets the method to "POST" and passes in a stream.
+	 */
+	postStream (stream, callback = null) {
+		return this.go(null, {
+			forceMethod: `POST`,
+		}, callback, stream);
 	}
 
 };
