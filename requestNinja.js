@@ -254,18 +254,18 @@ module.exports = class RequestNinja {
 	 * Shortcut method for a GET request.
 	 */
 	get (callback = null) {
-		return this.go(null, callback, {
+		return this.go(null, {
 			forceMethod: `GET`,
-		});
+		}, callback);
 	}
 
 	/*
 	 * Shortcut method for a POST request.
 	 */
 	post (postData, callback = null) {
-		return this.go(postData, callback, {
+		return this.go(postData, {
 			forceMethod: `POST`,
-		});
+		}, callback);
 	}
 
 	/*
@@ -273,9 +273,10 @@ module.exports = class RequestNinja {
 	 */
 	postJson (postData, callback = null) {
 		this.setHeader(`Content-Type: application/json`);
-		return this.go(JSON.stringify(postData), callback, {
+		const json = JSON.stringify(postData);
+		return this.go(json, {
 			forceMethod: `POST`,
-		});
+		}, callback);
 	}
 
 };
