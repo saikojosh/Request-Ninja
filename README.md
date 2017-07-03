@@ -35,6 +35,17 @@ req.postJson({ some: `post data` })  // Will be encoded as JSON and the Content-
 	.catch(err => { ... });
 ```
 
+Make a POST request with a stream like this:
+
+```javascript
+const RequestNinja = require(`request-ninja`);
+const req = new RequestNinja(`https://www.example.com/api/my-endpoint`);
+
+req.postStream(someStream)  // Will automatically pipe the stream for you.
+	.then(data => { ... })
+	.catch(err => { ... });
+```
+
 ## Breaking Changes in v0.2
 A few minor breaking changes have been made in version 0.2.
 
@@ -89,11 +100,14 @@ Executes the request with some optional post data, optional setting overrides (s
 **Post Data:**
 If no headers are set, the post data will be encoded as a query string and the Content-Type header will be set to "application/x-www-form-urlencoded". If you set the Content-Type header to something that includes "application/json" (and the post data is an Object or Array) then the post data will be stringified automatically.
 
-### .get(callback)
+### .get([callback])
 Utility method to execute the request with the GET method, and with an optional callback. If no callback is provided a promise will be returned. Internally this just calls the `.go()` method with the `forceMethod` setting overridden.
 
-### .post(postData, callback)
+### .post(postData[, callback])
 Utility method to execute the request with the POST method, and with some optional post data and an optional callback. If no callback is provided a promise will be returned. Internally this just calls the `.go()` method with the `forceMethod` setting overridden.
 
-### .postJson(postData, callback)
+### .postJson(postData[, callback])
 Utility method to execute the request with the POST method and convert the post data to JSON. This also sets the correct Content-Type header automatically. If no callback is provided a promise will be returned. Internally this just calls the `.go()` method with the `forceMethod` setting overridden.
+
+### .postStream(stream[, callback])
+Utility method to execute the request with the POST method and pipe the given stream. If no callback is provided a promise will be returned.
