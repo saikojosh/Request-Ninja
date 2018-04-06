@@ -61,7 +61,7 @@ module.exports = class RequestNinja {
 		this.module = (this.requestOptions.protocol === `https:` ? https : http);
 
 		// Log out the settings.
-		this.log(`Instantiated a new RequestNinja.`);
+		this.log(`\nInstantiated a new RequestNinja with settings:`);
 		this.log(this.settings);
 
 	}
@@ -151,11 +151,14 @@ module.exports = class RequestNinja {
 			if (typeof useSettings.timeout === `number`) { this.requestOptions.timeout = useSettings.timeout; }
 
 			// Log out the request.
-			this.log(`Making a ${this.requestOptions.method} request.`);
+			this.log(`\nMaking a ${this.requestOptions.method} request...`);
 			this.log(`Request Options:`);
 			this.log(this.requestOptions);
 			this.log(`Post Data:`);
 			this.log(postData);
+			this.log(`Stream:`);
+			this.log(stream ? `Yes` : `No`);
+
 
 			let requestBody = null;
 			let responseBody = ``;
@@ -191,7 +194,7 @@ module.exports = class RequestNinja {
 					}
 					catch (err) {
 						this.log(`Response body:`);
-						this.log(responseBody);
+						this.log(`"${responseBody}"`);
 						throw new Error(`Failed to parse JSON response because of "${err}".`);
 					}
 
