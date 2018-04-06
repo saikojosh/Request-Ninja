@@ -7,7 +7,7 @@
     "url": "https://github.com/saikojosh/Request-Ninja/issues"
   },
   "name": "request-ninja",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A simple helper module to help with calling an endpoint and returning some data.",
   "keywords": [
     "request",
