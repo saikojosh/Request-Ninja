@@ -30,6 +30,7 @@ module.exports = class RequestNinja {
 			parseJsonResponse: true,
 			returnResponseObject: false,
 			forceMethod: null,
+			logging: false,
 		}, _settings);
 
 		this.mode = null;
@@ -58,6 +59,10 @@ module.exports = class RequestNinja {
 
 		// Figure out which module we need to use.
 		this.module = (this.requestOptions.protocol === `https:` ? https : http);
+
+		// Log out the settings.
+		this.log(`Instantiated a new RequestNinja.`);
+		this.log(this.settings);
 
 	}
 
@@ -145,6 +150,13 @@ module.exports = class RequestNinja {
 			// Override the timeout in the options, if one was explicitly set.
 			if (typeof useSettings.timeout === `number`) { this.requestOptions.timeout = useSettings.timeout; }
 
+			// Log out the request.
+			this.log(`Making a ${this.requestOptions.method} request.`);
+			this.log(`Request Options:`);
+			this.log(this.requestOptions);
+			this.log(`Post Data:`);
+			this.log(postData);
+
 			let requestBody = null;
 			let responseBody = ``;
 
@@ -173,7 +185,15 @@ module.exports = class RequestNinja {
 				res.on(`end`, () => {
 
 					const isJson = this.isContentTypeJson(res.headers);
-					res.body = (isJson ? JSON.parse(responseBody) : responseBody);
+
+					try {
+						res.body = (isJson ? JSON.parse(responseBody) : responseBody);
+					}
+					catch (err) {
+						this.log(`Response body:`);
+						this.log(responseBody);
+						throw new Error(`Failed to parse JSON response because of "${err}".`);
+					}
 
 					return resolve(useSettings.returnResponseObject ? res : res.body);
 
@@ -294,6 +314,15 @@ module.exports = class RequestNinja {
 		return this.go(null, {
 			forceMethod: `POST`,
 		}, callback, stream);
+	}
+
+	/*
+	 * Logs out the given data if logging is enabled.
+	 */
+	log (output) {
+		if (!this.settings.logging) { return; }
+		const formattedOutput = (typeof output === `object` ? JSON.stringify(output, null, 2) : output);
+		console.log(formattedOutput); // eslint-disable-line no-console
 	}
 
 };
