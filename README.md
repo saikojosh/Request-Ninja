@@ -66,6 +66,7 @@ Returns a new instance of a request when supplied with the endpoint to call, and
 | parseJsonResponse    | `true`        | By default, if the "Content-Type" header of the response is set to "application/json" and the response body contains JSON, it will be parsed automatically. Set to `false` to disable. |
 | returnResponseObject | false         | Returns the node `response` object directly. If the response body is JSON it will be parsed and available as the `response.body` property. |
 | forceMethod          | `null`        | Override the method we'll be using when making the request. |
+| logging							 | `false`			 | Set `true` to enable request logging. |
 
 ### .setEncoding(encoding)
 Change the encoding setting after a request object has been initialised. Affects the encoding for both the request and the response. Returns the request object so it can be chained.
