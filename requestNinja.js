@@ -190,7 +190,7 @@ module.exports = class RequestNinja {
 					const isJson = this.isContentTypeJson(res.headers);
 
 					try {
-						res.body = (isJson ? JSON.parse(responseBody) : responseBody);
+						res.body = (isJson ? JSON.parse(responseBody.trim() || `{}`) : responseBody);
 					}
 					catch (err) {
 						this.log(`Response body:`);
