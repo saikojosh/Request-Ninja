@@ -4,7 +4,11 @@
  * REQUEST NINJA
  */
 
-/* eslint id-length: 0 */
+/* eslint max-lines: 0 */
+/* eslint max-statements: 0 */
+/* eslint promise/no-callback-in-promise: 0 */
+/* eslint promise/prefer-await-to-callbacks: 0 */
+/* eslint promise/prefer-await-to-then: 0 */
 
 const http = require(`http`);
 const https = require(`https`);
@@ -125,7 +129,7 @@ module.exports = class RequestNinja {
 	 * Set a single header provided in the format "Authorisation: Bearer .....".
 	 */
 	setHeader (headerString) {
-		const [key, value] = headerString.split(/\s*:\s*/);
+		const [ key, value ] = headerString.split(/\s*:\s*/);
 		return this.setHeaders({ [key]: value });
 	}
 
@@ -134,7 +138,6 @@ module.exports = class RequestNinja {
 	 * callback(err, data);
 	 */
 	go (postData, overrideSettings = {}, callback = null, stream = null) {
-		/* eslint promise/no-callback-in-promise: 0 */
 
 		const future = new Promise((resolve, reject) => {
 
@@ -158,7 +161,6 @@ module.exports = class RequestNinja {
 			this.log(postData);
 			this.log(`Stream:`);
 			this.log(stream ? `Yes` : `No`);
-
 
 			let requestBody = null;
 			let responseBody = ``;
@@ -225,10 +227,14 @@ module.exports = class RequestNinja {
 		});
 
 		// Return the promise if we aren't using a callback.
-		if (typeof callback !== `function`) { return future; }
+		if (typeof callback !== `function`) {
+			return future;
+		}
 
 		// Otherwise fire the callback when the promise returns.
 		future.then(data => callback(null, data)).catch(err => callback(err));
+
+		return null;
 
 	}
 
