@@ -166,7 +166,7 @@ module.exports = class RequestNinja {
 			let responseBody = ``;
 
 			// Prepare the data for the POST request.
-			if (postData && this.requestOptions.method === `POST`) {
+			if (postData && (this.requestOptions.method === `POST` || this.requestOptions.method === `PUT`)) {
 
 				// Prepare and set the request body.
 				const {
@@ -313,6 +313,26 @@ module.exports = class RequestNinja {
 		const json = JSON.stringify(postData);
 		return this.go(json, {
 			forceMethod: `POST`,
+		}, callback);
+	}
+
+	/*
+ * Shortcut method for a PUT request.
+ */
+	put (putData, callback = null) {
+		return this.go(putData, {
+			forceMethod: `PUT`,
+		}, callback);
+	}
+
+	/*
+	 * Forcefully stringifies the put data and forces the method to "PUT".
+	 */
+	putJson (putData, callback = null) {
+		this.setHeader(`Content-Type: application/json`);
+		const json = JSON.stringify(putData);
+		return this.go(json, {
+			forceMethod: `PUT`,
 		}, callback);
 	}
 
