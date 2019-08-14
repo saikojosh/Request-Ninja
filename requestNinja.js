@@ -320,7 +320,7 @@ module.exports = class RequestNinja {
 	}
 
 	/*
-	 * Forcefully stringifies the post data and forces the method to "PUT".
+	 * Forcefully stringifies the put data and forces the method to "PUT".
 	 */
 	putJson (putData, callback = null) {
 		this.setHeader(`Content-Type: application/json`);
